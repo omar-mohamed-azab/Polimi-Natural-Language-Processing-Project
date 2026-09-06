@@ -1,0 +1,60 @@
+# Who Wants to be a PoliMillionaire? — NLP Group Assignment 2025/26
+
+An automated agent that plays the online quiz game *"Who Wants to be a PoliMillionaire?"*
+using locally-run, open-weights language models, optional retrieval augmentation (RAG),
+a speech interface, and LoRA fine-tuning.
+
+## Contents
+
+| File | Description |
+|------|-------------|
+| `PoliMillionaire.ipynb` | Main notebook — the full combined pipeline (both models, RAG, speech, fine-tuning) |
+| `PoliMillionaire.html`  | Rendered HTML export of the notebook (required hand-in format) |
+| `game_log.json`         | Persistent answer-memory log used by the memory / elimination layer |
+| `Chatbot Performance.xlsx` | Measured per-category / per-strategy performance |
+| `PoliMillionaire_Report.docx` | Technical report |
+
+## System overview
+
+For every question the agent runs a layered decision flow, cheapest-and-most-reliable first:
+
+1. **Memory layer** — if the exact question was answered correctly before, reuse it; eliminate options known to be wrong (`game_log.json`).
+2. **Pass 1** — a confidence-gated first answer from the LLM.
+3. **RAG** — on low confidence, retrieve from Wikipedia / DuckDuckGo with a relevance gate (spaCy NER + TF-IDF) and answer again.
+4. **Pass 2** — a two-vote override.
+5. **Category learning** — few-shot prompting from logged answers and a LoRA adapter.
+
+Two base models are compared: **Llama-3.1-8B-Instruct** (Adil) and **Qwen2.5-14B-Instruct**, 4-bit quantized (Omar).
+A **speech mode** uses a local Whisper model (`faster-whisper`) so the same pipeline can play the game's spoken interface.
+
+> **Note:** load only one model at a time — the notebook is organized so §2 loads Llama and §3 loads Qwen; restart the runtime between them.
+
+## How to run
+
+1. Open `PoliMillionaire.ipynb` in Google Colab / Kaggle with a GPU runtime.
+2. Run **Section 0** (setup, dependencies, game-server login, `millionaire_client`).
+3. Run **either** §2 (Llama) **or** §3 (Qwen), then the sections that use it.
+4. The `millionaire_client` package (provided with the course) must be on the Python path.
+
+## Team
+
+<!-- TODO before final hand-in: replace with real names + emails of all group members -->
+- Name Surname — student@mail.polimi.it
+- Name Surname — student@mail.polimi.it
+- ... (group of 4–5)
+
+## Video
+
+<!-- TODO: paste the link to the ~5-minute screen-capture video here -->
+Video: _link pending_
+
+## Use of coding assistants
+
+<!-- TODO: state which AI coding assistants were used and for what, as required by the assignment brief -->
+_Statement pending._
+
+---
+### ⚠️ Notes for the team (remove before submitting)
+- This repo contains the **merged** notebook. The group has 4–5 members but the merge currently credits only **Adil** (Llama) and **Omar** (Qwen). **Check whether other members' sections are missing** and add them.
+- The report (`PoliMillionaire_Report.docx`) documents the **Qwen pipeline only** — Adil's Llama experiments / prompt-strategy write-up may need to be added.
+- Fill in the three TODOs above (team names+emails, video link, coding-assistant statement) — all are required deliverables.

@@ -1,0 +1,32 @@
+# OS junk
+.DS_Store
+__MACOSX/
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.pyc
+__pycache__/
+
+# Large media / recordings (keep videos off GitHub — link them instead)
+*.mp4
+*.mov
+*.avi
+
+# Model weights / adapters / caches
+*.safetensors
+*.bin
+*.gguf
+adapter/
+checkpoints/
+hf_cache/
+
+# Local env
+.env
+venv/
+.venv/
+
+# macOS AppleDouble + Office lock files
+._*
+~$*
+*~$*
